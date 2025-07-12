@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Login</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom right, #e0f2fe, #f8fafc);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .login-container {
+      background: white;
+      padding: 30px 25px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+      width: 100%;
+      max-width: 360px;
+      animation: fadeIn 0.4s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.98); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    h2 {
+      margin-top: 0;
+      margin-bottom: 20px;
+      text-align: center;
+      color: #1e3a8a;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 1em;
+      transition: border-color 0.2s;
+    }
+
+    input:focus {
+      border-color: #2563eb;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      font-size: 1em;
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #1d4ed8;
+    }
+
+    .error {
+      color: #dc2626;
+      font-size: 0.9em;
+      margin-top: 10px;
+      text-align: center;
+      min-height: 1.2em;
+    }
+
+    @media (max-width: 480px) {
+      .login-container {
+        margin: 0 20px;
+        padding: 24px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>Admin Login</h2>
+    <input type="email" id="email" placeholder="Email" required />
+    <input type="password" id="password" placeholder="Password" required />
+    <button onclick="login()">Login</button>
+    <div class="error" id="error"></div>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDMM9w0BPEVhu-GnuL0_spwoH_Mkl2GmAE",
+      authDomain: "booking-f5070.firebaseapp.com",
+      projectId: "booking-f5070",
+      storageBucket: "booking-f5070.firebasestorage.app",
+      messagingSenderId: "201773212594",
+      appId: "1:201773212594:web:759d0c29fffb127e667aab"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    const allowedEmail = "eliteeventsandcaterers@outlook.ie"; // ✅ Replace with your admin email
+
+    function login() {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const errorDiv = document.getElementById("error");
+
+      if (email !== allowedEmail) {
+        errorDiv.textContent = "Unauthorized email.";
+        return;
+      }
+
+      auth.signInWithEmailAndPassword(email, password)
+        .then(() => {
+          window.location.href = "https://www.youtube.com/"; // ✅ Redirect to YouTube
+        })
+        .catch((err) => {
+          errorDiv.textContent = "Login failed: " + err.message;
+        });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Book Your Event</title>
+
+  <!-- Flatpickr calendar CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+  :root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --text-dark: #1e293b;
+    --text-light: #64748b;
+    --border: #d1d5db;
+    --bg: #f9fafb;
+    --radius: 12px;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: var(--bg);
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+  }
+
+  form {
+    background: #fff;
+    padding: 32px;
+    border-radius: var(--radius);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    max-width: 600px;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 1.8rem;
+    color: var(--primary);
+    margin-bottom: 24px;
+  }
+
+  label {
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-top: 16px;
+    display: block;
+  }
+
+  input, select, button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 6px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.3s;
+  }
+
+  input:focus, select:focus {
+    border-color: var(--primary);
+    outline: none;
+  }
+
+  button {
+    margin-top: 24px;
+    background-color: var(--primary);
+    color: white;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  button:hover {
+    background-color: var(--primary-dark);
+  }
+
+  details {
+    margin-top: 16px;
+    font-size: 0.95rem;
+    color: var(--text-light);
+  }
+
+  ul {
+    padding-left: 20px;
+    margin: 8px 0 0;
+    color: #555;
+  }
+
+  #bookingMessage {
+    color: #dc2626;
+    font-size: 0.9rem;
+    margin-top: 6px;
+  }
+
+  .checkbox-container {
+    display: flex;
+    align-items: center;
+    margin-top: 14px;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .checkbox-container input {
+    width: auto;
+    margin: 0;
+  }
+
+  #overrideContainer {
+    margin-top: 14px;
+  }
+
+  /* Mobile Responsiveness */
+  @media (max-width: 600px) {
+    body {
+      padding: 12px;
+    }
+
+    form {
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+    }
+
+    input, select, button {
+      font-size: 1rem;
+    }
+
+    label {
+      font-size: 0.95rem;
+    }
+
+    .checkbox-container {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <form id="bookingForm">
+    <h1>Book Your Event</h1>
+
+    <label for="surname">Surname:</label>
+    <input type="text" id="surname" required>
+
+    <label for="firstName">First Name:</label>
+    <input type="text" id="firstName" required>
+
+    <label for="phoneNumber">Phone Number:</label>
+    <input type="tel" id="phoneNumber" required>
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" required>
+
+    <label for="eventType">Event Type:</label>
+    <select id="eventType" required>
+      <option value="">--Select--</option>
+      <option value="wedding">Wedding</option>
+      <option value="corporate">Corporate</option>
+      <option value="birthday">Birthday</option>
+      <option value="concert">Concert</option>
+      <option value="anniversary">Anniversary</option>
+      <option value="holy communion">Holy Communion</option>
+      <option value="post funeral">Post-Funeral</option>
+      <option value="other">Other</option>
+    </select>
+
+    <div id="otherEventTypeContainer" style="display: none;">
+      <label for="otherEventType">Please specify:</label>
+      <input type="text" id="otherEventType">
+    </div>
+
+    <label for="hoursCount">Number of Hours:</label>
+    <select id="hoursCount" required>
+      <option value="">--Select Hours--</option>
+      <option value="1">1 Hour</option>
+      <option value="2">2 Hours</option>
+      <option value="3">3 Hours</option>
+      <option value="4">4 Hours</option>
+      <option value="5">5 Hours</option>
+      <option value="6">6 Hours</option>
+      <option value="7">7 Hours</option>
+      <option value="8">8 Hours</option>
+      <option value="9">9 Hours</option>
+      <option value="10">10 Hours</option>
+      <option value="11">11 Hours</option>
+      <option value="12">12 Hours</option>
+    </select>
+
+    <label for="date">Event Date:</label>
+    <input id="date" required>
+
+    <details id="bookedTimesPanel">
+      <summary>View Booked Slots</summary>
+      <ul id="bookedTimesList"></ul>
+    </details>
+
+    <label for="startTime">Start Time:</label>
+    <select id="startTime" required>
+      <option value="">--Select--</option>
+    </select>
+    <div id="bookingMessage"></div>
+
+    <label for="endTime">End Time:</label>
+    <input type="text" id="endTime" readonly>
+
+    <div class="checkbox-container">
+      <input type="checkbox" id="cateringService">
+      <label for="cateringService">I wish to avail catering/food service</label>
+    </div>
+
+    <div id="overrideContainer" style="display: none;">
+      <label><input type="checkbox" id="adminOverride"> Allow time override</label>
+    </div>
+
+    <button type="submit">Submit Booking</button>
+  </form>
+  <!-- JS Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+  <!-- Config -->
+  <script>
+    emailjs.init("UHXb-rlhf5E7Ws_i4");
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDMM9w0BPEVhu-GnuL0_spwoH_Mkl2GmAE",
+      authDomain: "booking-f5070.firebaseapp.com",
+      projectId: "booking-f5070",
+      storageBucket: "booking-f5070.firebasestorage.app",
+      messagingSenderId: "201773212594",
+      appId: "1:201773212594:web:759d0c29fffb127e667aab"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+  </script>
+
+  <!-- Your logic -->
+  <script src="script.js"></script>
+  <script>
+    document.getElementById("eventType").addEventListener("change", function () {
+      const otherField = document.getElementById("otherEventTypeContainer");
+      otherField.style.display = this.value === "other" ? "block" : "none";
+    });
+
+    if (location.href.includes("override=true")) {
+      document.getElementById("overrideContainer").style.display = "block";
+    }
+  </script>
+</body>
+</html>
